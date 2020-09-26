@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
-  rot to: 'tweets#index'
+  root to: 'tweets#index'
   resources :tweets do
-    resources :comments
+    resources :comments, only: :create
     collection do
       get 'search'
     end
   end
-  resources :users
+  resources :users, only: :show
 end
