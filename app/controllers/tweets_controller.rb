@@ -16,7 +16,11 @@ class TweetsController < ApplicationController
   end
 
   def destroy
-    tweet.destroy
+    if tweet.destroy
+      redirect_to :destroy
+    else
+      render :index
+    end
   end
 
   def update
