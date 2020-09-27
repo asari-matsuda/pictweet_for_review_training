@@ -1,6 +1,7 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:edit, :show]
   before_action :move_to_index, except: [:index, :show, :search]
+  before_action :local_set_tweet, only: [:update, :destroy]
 
   def index
     @tweets = Tweet.includes(:user).order("created_at DESC")
@@ -15,12 +16,10 @@ class TweetsController < ApplicationController
   end
 
   def destroy
-    tweet = Tweet.find(params[:id])
     tweet.destroy
   end
 
   def update
-    tweet = Tweet.find(params[:id])
     tweet.update(tweet_params)
   end
 
@@ -41,6 +40,10 @@ class TweetsController < ApplicationController
 
   def set_tweet
     @tweet = Tweet.find(params[:id])
+  end
+
+  def local_set_tweet
+    tweet = Tweet.find(params[:id])
   end
 
   def move_to_index
