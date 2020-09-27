@@ -25,7 +25,7 @@ class TweetsController < ApplicationController
 
   def update
     if tweet.update(tweet_params)
-      redirect_to root_path
+      redirect_to :update
     else
       render :index
     end
