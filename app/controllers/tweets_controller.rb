@@ -20,7 +20,11 @@ class TweetsController < ApplicationController
   end
 
   def update
-    tweet.update(tweet_params)
+    if tweet.update(tweet_params)
+      redirect_to root_path
+    else
+      render :index
+    end
   end
 
   def show
