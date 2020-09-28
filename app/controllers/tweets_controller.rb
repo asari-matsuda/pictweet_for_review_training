@@ -12,25 +12,19 @@ class TweetsController < ApplicationController
   end
 
   def create
-    if Tweet.create(tweet_params)
-      redirect_to :create
-    else
+    unless Tweet.create(tweet_params)
       render :new
     end
   end
 
   def destroy
-    if tweet.destroy
-      redirect_to :destroy
-    else
+    unless tweet.destroy
       render :index
     end
   end
 
   def update
-    if tweet.update(tweet_params)
-      redirect_to :update
-    else
+    unless tweet.update(tweet_params)
       render :index
     end
   end
