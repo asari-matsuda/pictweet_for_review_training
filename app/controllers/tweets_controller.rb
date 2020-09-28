@@ -12,7 +12,11 @@ class TweetsController < ApplicationController
   end
 
   def create
-    Tweet.create(tweet_params) ? redirect_to :create : render :new
+    if Tweet.create(tweet_params)
+      redirect_to :create
+    else
+      render :new
+    end
   end
 
   def destroy
