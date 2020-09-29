@@ -1,6 +1,7 @@
 class TweetsController < ApplicationController
-  # before_action :set_tweet, only: [:edit, :show]
+  before_action :set_tweet, only: [:edit, :show]
   before_action :move_to_index, except: [:index, :show, :search]
+  before_action :local_set_tweet, only: [:update, :destroy]
 
   def index
     @tweets = Tweet.includes(:user).order("created_at DESC")
@@ -11,26 +12,24 @@ class TweetsController < ApplicationController
   end
 
   def create
-    binding.pry
-    Tweet.create(tweet_params)
+    unless Tweet.create(tweet_params)
+      render :new
+    end
   end
 
   def destroy
-    tweet = Tweet.find(params[:id])
-    tweet.destroy
-  end
-
-  def edit
-    @tweet = Tweet.find(params[:id])
+    unless tweet.destroy
+      render :index
+    end
   end
 
   def update
-    tweet = Tweet.find(params[:id])
-    tweet.update(tweet_params)
+    unless tweet.update(tweet_params)
+      render :index
+    end
   end
 
   def show
-    @tweet = Tweet.find(params[:id])
     @comment = Comment.new
     @comments = @tweet.comments.includes(:user)
   end
@@ -45,9 +44,13 @@ class TweetsController < ApplicationController
     params.require(:tweet).permit(:image, :text).merge(user_id: current_user.id)
   end
 
-  # def set_tweet
-  #   @tweet = Tweet.find(params[:id])
-  # end
+  def set_tweet
+    @tweet = Tweet.find(params[:id])
+  end
+
+  def local_set_tweet
+    tweet = Tweet.find(params[:id])
+  end
 
   def move_to_index
     redirect_to action: :index unless user_signed_in?
